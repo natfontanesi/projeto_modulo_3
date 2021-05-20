@@ -1,18 +1,16 @@
 --1: Qual piloto mais ganhou corridas?
 
 select
-    r.driverid,
     r.position,
     d.forename,
     d.surname,
-    count (r.driverid) as total_vitorias
+    sum (r."position") as total_vitorias
 from
     results r
     join drivers d on d.driverid = r.driverid
 where
     r.position = 1
 group by
-    r.driverid,
     r.position,
     d.forename,
     d.surname
@@ -35,10 +33,12 @@ order by
 --4: Qual país tem mais vitórias?
 select
 	d.nationality,
-	SUM (ds.wins) as total_vitorias
+	SUM (r."position") as total_vitorias
 from 
 	drivers d 
-	join driverstandings ds on d.driverid = ds.driverid
+	join results r on d.driverid = r.driverid
+WHERE
+	r."position"=1
 group BY
 	d.nationality
 order by total_vitorias desc
