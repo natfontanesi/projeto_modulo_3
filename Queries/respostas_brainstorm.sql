@@ -80,4 +80,4 @@ order by total_vitorias desc
 
 --23: Qual construtora se destacou com os menores pit_stops durante o espaço de tempo analisado?
 
---24: Nome do circuito mais presente em cada ano analisado e a quantidade de vezes que aparece...
+--24: Nome do circuito mais presente em cada ano analisado e a quantidade de vezes que aparece.
