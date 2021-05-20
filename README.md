@@ -4,5 +4,5 @@
 ## Membros da equipe:  
 
 
-[Natalia Oliveira](https://github.com/Natalia-oli)  👥 [Natascha Weber](https://github.com/natfontanesi) 👥 [Olavo Pessoa](https://github.com/Olavo5) 👥 [Victor Silva](https://github.com/victorsilvajc021)  
+👥[Natalia Oliveira](https://github.com/Natalia-oli)  👥 [Natascha Weber](https://github.com/natfontanesi) 👥 [Olavo Pessoa](https://github.com/Olavo5) 👥 [Victor Silva](https://github.com/victorsilvajc021)  
  </div>
