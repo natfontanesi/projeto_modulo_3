@@ -1,4 +1,4 @@
-[![Markdown](https://raw.githubusercontent.com/natfontanesi/projeto_modulo_3/e9e5824991681df67b13467796d712856f60fa16/formula-1-logo.svg?raw=true)](https://raw.githubusercontent.com/natfontanesi/projeto_modulo_3/e9e5824991681df67b13467796d712856f60fa16/formula-1-logo.svg?raw=true) 
+<img width="400px" align="center" src="https://raw.githubusercontent.com/natfontanesi/projeto_modulo_3/e9e5824991681df67b13467796d712856f60fa16/formula-1-logo.svg?raw=true" />
 
 
 ## Membros da equipe:  
