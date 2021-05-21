@@ -44,9 +44,22 @@ group BY
 order by total_vitorias desc
 
 --5: Qual a pista mais rápida?
+
 --6: Qual é a média de pit stops?
 
 --7: Quantos brasileiros foram campeões?
+    select
+	d.forename, d.surname, d.nationality, 
+	sum(r."position") as vitorias
+from 
+	drivers d 
+	join results r on d.driverid = r.driverid
+WHERE
+	d.nationality='Brazilian' and position=1
+group BY
+	d.forename, d.surname, d.nationality
+	
+order by vitorias desc;
 
 --8: Qual piloto teve mais pole position?
 
@@ -81,3 +94,43 @@ order by total_vitorias desc
 --23: Qual construtora se destacou com os menores pit_stops durante o espaço de tempo analisado?
 
 --24: Nome do circuito mais presente em cada ano analisado e a quantidade de vezes que aparece.
+
+
+--Campeoes por ano (mais ou menos):
+
+SELECT 
+	rc."year",
+	d.forename,
+	d.surname,
+	sum(rs.points) total
+FROM 
+	races rc 
+	join results rs on rc.raceid = rs.raceid
+	join drivers d on rs.driverid = d.driverid 
+group by 
+	rc."year",
+	d.forename,
+	d.surname
+HAVING
+	sum(rs.points)>=30
+order BY
+	rc."year",
+	total desc
+
+-- qtd de pitstops, mas tem alguma coisa errada
+SELECT	
+	d.driverref,
+	rc."year",
+	rc."round",
+	sum(p.stop)
+	
+FROM
+	pitstops p
+	join races rc on p.raceid=rc.raceid
+	join drivers d on p.driverid=d.driverid
+group BY
+	d.driverref,
+	rc."year",
+	rc."round"
+order BY
+	rc."year"
