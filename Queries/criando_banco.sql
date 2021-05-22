@@ -11,8 +11,10 @@ create table circuits(
 	alt VARCHAR,
 	url VARCHAR
 );
+
+
 copy circuits
-from '/home/circuits.csv' with delimiter ',' csv header ENCODING 'windows-1251';
+from 'formula_correto/circuits.csv' with delimiter ',' csv header ENCODING 'windows-1251';
 --------------------------------------------------------------------------------------
 
 --docker cp C:\Users\natas\OneDrive\Documentos\Formula_virgula\constructorResults.csv data-engine_postgres:/home
