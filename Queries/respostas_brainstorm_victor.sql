@@ -95,6 +95,7 @@ order by vitorias desc;
 
 --24: Nome do circuito mais presente em cada ano analisado e a quantidade de vezes que aparece.
 
+select * from races;
 
 --Campeoes por ano (mais ou menos):
 
