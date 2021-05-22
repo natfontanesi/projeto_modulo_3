@@ -135,3 +135,4 @@ group BY
 order BY
 	rc."year"
 
+select * from pitstops;
