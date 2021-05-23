@@ -77,6 +77,7 @@ order by vitorias desc;
 
 --15: quem foi melhor nikki lauda ou James Hunt?
 
+
 --16: Qual foi o melhor brasileiro?
 
 --17: Qual construtor e motorista relacionado mais se destacaram dentre as 5 primeiras posições durante os campeonatos?
