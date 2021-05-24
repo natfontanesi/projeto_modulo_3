@@ -48,18 +48,20 @@ order by total_vitorias desc
 --6: Qual é a média de pit stops?
 
 --7: Quantos brasileiros foram campeões?
-    select
-	d.forename, d.surname, d.nationality, 
-	sum(r."position") as vitorias
+   select
+	c.driverid,
+	c.forename,
+	c.surname,
+	count (c.driverid) as vezes_campeao
 from 
-	drivers d 
-	join results r on d.driverid = r.driverid
-WHERE
-	d.nationality='Brazilian' and position=1
-group BY
-	d.forename, d.surname, d.nationality
-	
-order by vitorias desc;
+	vw_campeoes_nome c
+	join drivers d on d.driverid=c.driverid
+where 
+	d.nationality='Brazilian'
+group by 
+	c.driverid,
+	c.forename,
+	c.surname
 
 --8: Qual piloto teve mais pole position?
 
@@ -97,24 +99,6 @@ order by vitorias desc;
 --24: Nome do circuito mais presente em cada ano analisado e a quantidade de vezes que aparece.
 
 
---Campeoes por ano (mais ou menos):
-
-SELECT 
-	rc."year",
-	d.forename,
-	d.surname,
-	sum(rs.points) total
-FROM 
-	races rc 
-	join results rs on rc.raceid = rs.raceid
-	join drivers d on rs.driverid = d.driverid 
-group by 
-	rc."year",
-	d.forename,
-	d.surname
-order BY
-	rc."year",
-	total desc
 
 -- qtd de pitstops, mas tem alguma coisa errada
 SELECT	
