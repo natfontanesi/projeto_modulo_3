@@ -135,23 +135,4 @@ group BY
 order BY
 	rc."year"
 
-	--pontos_campeoes_ano
-
-SELECT 
-	vw.year,
-	max(vw.total) AS max
-FROM 
-	vw_pontos_ano_id vw
-GROUP BY 
-	vw.year
-ORDER BY 
-	vw.year;
-
-  --vw campeoes
-   SELECT pa.forename,
-    pa.surname,
-    pa.total,
-    pa.year,
-    pa.driverid
-   FROM (vw_pontos_ano_id pa
-     JOIN vw_pontos_campeoes_ano pc ON ((pc.max = pa.total)));
+select * from pitstops;
