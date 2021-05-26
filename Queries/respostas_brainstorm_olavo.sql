@@ -135,4 +135,102 @@ group BY
 order BY
 	rc."year"
 
-select * from pitstops;
+--- Melhor por década? segundo melhor 
+ 
+select  d.driverid, d.forename, d.surname, r."date", sum(rs."position") as position, sum(rs.points) as points
+	from drivers d 
+	inner join races r 
+	on d.driverid = r.driverid 
+	inner join results rs
+	on r.driverid = rs.driverid 
+	group by d.forename, d.surname, r."date";
+	where 
+	select avg(position) 
+	from results;
+----------------------------------------
+
+--- Quem é ou quem foi o melhor brasileiro? 
+
+select distinct d.forename,
+	d.surname, d.nationality, 
+	sum(r."position") as primeiro_lugar, 
+	sum(r.points) as pontuacao, 
+	min(r."time") as menor_tempo 
+	from drivers d
+	left join results r
+	on d.driverid = r.driverid 
+	where nationality = 'Brazilian'
+	and position = 1
+	group by d.forename, d.surname, d.nationality 
+	order by sum(r."position") desc limit 4;
+
+---------------------------------------------------
+
+--- Qual nacionalidade lidera o primeiro lugar? 
+
+select d.nationality,
+    sum(r."position") as primeiro_lugar, 
+    sum(r.points) as pontuacao
+    from drivers d
+    inner join results r
+    on d.driverid = r.driverid 
+    where  position = 1
+    group by  d.nationality
+    order by sum(r."position") desc;
+
+-------------------------------------------------
+
+--- Pódio com os três melhores pilotos e suas respectivas nacionalidades.
+
+select d.forename, d.surname, d.nationality,
+    sum(r."position") as position,
+    sum(r.points) as pontuacao
+    from drivers d
+    inner join results r
+    on d.driverid = r.driverid 
+    where  position = 1
+    group by  d.nationality, d.forename, d.surname
+    order by sum(r."position")desc limit 3;
+   
+-------------------------------------------------   
+
+   --- Quem foi melhor nikki lauda ou James Hunt? 
+
+select distinct d.forename,
+	d.surname, d.nationality, 
+	sum(r."position") as primeiro_lugar, 
+	sum(r.points) as pontuacao
+	 from drivers d
+left join results r
+on d.driverid = r.driverid 
+where forename = 'Hunt'
+group by d.forename, d.surname, d.nationality 
+order by sum(r."position") desc;
+
+-------------------------------------------------
+--- Quem foi melhor nikki lauda ou James Hunt? 
+
+select distinct d.forename,
+	d.surname, d.nationality, 
+	r."position" as posicao, 
+	r.points as pontuacao
+	from drivers as d
+	inner join results r
+	on d.driverid = r.driverid
+	where surname = 'Hunt'
+	or surname = 'Lauda';
+	
+
+-----------------------------------------------------------------------
+
+--- pegar o melhor desempenho na corrida, os pit stops afetaram? 
+
+ select distinct pitstops.driverid, d.forename, d.surname, pitstops.stop, pitstops.milliseconds, d2.wins, results."time" 
+ 	from pitstops 
+ 	inner join driverstandings d2
+ 	on pitstops.driverid = d2.raceid
+ 	inner join results 
+ 	on d2.raceid = results.raceid
+ 	inner join drivers d 
+ 	on results.raceid = d.driverid
+ 	order by "milliseconds";
