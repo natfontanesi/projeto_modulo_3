@@ -17,6 +17,24 @@ group by
 order by
     count (r.driverid) desc
 --2: Qual piloto teve a volta mais rápida?
+SELECT 
+	d.forename,
+	d.surname,
+	c."name",
+	c.country,
+	MIN(milliseconds) menor_tempo
+FROM 
+	laptimes l
+	JOIN drivers d on l.driverid = d.driverid
+	JOIN races rc on rc.raceid=l.raceid
+	JOIN circuits c on rc.circuitid=c.circuitid
+GROUP BY
+	d.forename,
+	d.surname,
+	c.circuitid,
+	c.country
+ORDER BY
+	menor_tempo
 
 
 --3: Qual escuderia teve mais pontos?
@@ -46,27 +64,47 @@ order by total_vitorias desc
 --5: Qual a pista mais rápida?
 
 --6: Qual é a média de pit stops?
+SELECT 
+	AVG(duration)
+FROM
+	pitstops
 
 --7: Quantos brasileiros foram campeões?
-    select
-	d.forename, d.surname, d.nationality, 
-	sum(r."position") as vitorias
+   select
+	c.driverid,
+	c.forename,
+	c.surname,
+	count (c.driverid) as vezes_campeao
 from 
-	drivers d 
-	join results r on d.driverid = r.driverid
-WHERE
-	d.nationality='Brazilian' and position=1
-group BY
-	d.forename, d.surname, d.nationality
-	
-order by vitorias desc;
+	vw_campeoes_nome c
+	join drivers d on d.driverid=c.driverid
+where 
+	d.nationality='Brazilian'
+group by 
+	c.driverid,
+	c.forename,
+	c.surname
 
 --8: Qual piloto teve mais pole position?
+SELECT
+	d.forename,
+	d.surname,
+	COUNT(q."position") as qtd_pole_position
+FROM
+	qualifying q
+	JOIN drivers d ON d.driverid=q.driverid
+WHERE 
+	q."position" = 1
+GROUP BY
+	d.forename,
+	d.surname
+ORDER BY
+	qtd_pole_position desc
 
 --9: Pegar o melhor desempenho na corrida, os pit stops afetaram?
 
 --10: Qual nacionalidade chegou mais em primeiro?
-
+	--repetida
 --11: Montar um pódio com a nacionalidade do primeiro, do segundo e do terceiro maior ganhador;
 
 --12: Média de pontos do ganhador  por temporada;
@@ -77,7 +115,22 @@ order by vitorias desc;
 
 --15: quem foi melhor nikki lauda ou James Hunt?
 
+
 --16: Qual foi o melhor brasileiro?
+	select
+	c.driverid,
+	c.forename,
+	c.surname,
+	count (c.driverid) as vezes_campeao
+from 
+	vw_campeoes_nome c
+	join drivers d on d.driverid=c.driverid
+where 
+	d.nationality='Brazilian'
+group by 
+	c.driverid,
+	c.forename,
+	c.surname
 
 --17: Qual construtor e motorista relacionado mais se destacaram dentre as 5 primeiras posições durante os campeonatos?
 
@@ -89,33 +142,24 @@ order by vitorias desc;
  
 --21: Quais os pit-stops mais rápidos dentre os anos analisados e de quem foi? - parada do carro para troca de pneus e reabastecimento
 
---22: Qual motorista e construtora mais se destacou com os menores pit_stops?
+--22: Qual motorista mais se destacou com os menores pit_stops?
+SELECT	
+	d.surname,
+	d.forename,
+	MIN(pt.milliseconds)
+from 
+	pitstops pt
+	join drivers d on d.driverid = pt.driverid
+GROUP BY
+	d.surname,
+	d.forename
+	limit 10
 
 --23: Qual construtora se destacou com os menores pit_stops durante o espaço de tempo analisado?
 
 --24: Nome do circuito mais presente em cada ano analisado e a quantidade de vezes que aparece.
 
-
---Campeoes por ano (mais ou menos):
-
-SELECT 
-	rc."year",
-	d.forename,
-	d.surname,
-	sum(rs.points) total
-FROM 
-	races rc 
-	join results rs on rc.raceid = rs.raceid
-	join drivers d on rs.driverid = d.driverid 
-group by 
-	rc."year",
-	d.forename,
-	d.surname
-HAVING
-	sum(rs.points)>=30
-order BY
-	rc."year",
-	total desc
+-
 
 -- qtd de pitstops, mas tem alguma coisa errada
 SELECT	
@@ -135,23 +179,40 @@ group BY
 order BY
 	rc."year"
 
-	--pontos_campeoes_ano
+-- Quantas corridas e vitórias Schumacher e Hamilton tem:
+SELECT
+	d.driverid,
+	d.forename,
+	d.surname,
+	count(d.driverid) as corridas,
+	count(rs.position) as vitorias,
+	(count(rs.position))/ (count(d.driverid))::FLOAT as desempenho
+FROM
+	results rs
+	JOIN drivers d ON d.driverid=rs.driverid
+GROUP BY
+	d.driverid,
+	d.forename,
+	d.surname
+having d.driverid in (30,1)
+ORDER BY
+	corridas DESC
+-- nao ta dando certo, vou tentar ver com o ruberth
 
-SELECT 
-	vw.year,
-	max(vw.total) AS max
-FROM 
-	vw_pontos_ano_id vw
-GROUP BY 
-	vw.year
-ORDER BY 
-	vw.year;
-
-  --vw campeoes
-   SELECT pa.forename,
-    pa.surname,
-    pa.total,
-    pa.year,
-    pa.driverid
-   FROM (vw_pontos_ano_id pa
-     JOIN vw_pontos_campeoes_ano pc ON ((pc.max = pa.total)));
+SELECT
+	d.driverid,
+	d.forename,
+	d.surname,
+	(select count(driverid)  from results where driverid =30) as corridas_schumacher,
+	(select count(driverid)  from results where driverid =1) as corridas_hamilton,
+	count(rs.driverid) as vitorias
+FROM
+	results rs
+	left JOIN drivers d ON d.driverid=rs.driverid
+WHERE rs."position"=1 and rs.driverid in (30,1)
+GROUP BY
+	d.driverid,
+	d.forename,
+	d.surname
+ORDER BY
+	vitorias DESC
