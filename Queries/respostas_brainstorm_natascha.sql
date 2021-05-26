@@ -203,16 +203,16 @@ SELECT
 	d.driverid,
 	d.forename,
 	d.surname,
-	count(d.driverid) as corridas,
-	(select count(rs.position) from results rs where "position"=1 group by rs.driverid) as vitorias,
-	(count(rs.position))/ (count(d.driverid))::FLOAT as desempenho
+	(select count(driverid)  from results where driverid =30) as corridas_schumacher,
+	(select count(driverid)  from results where driverid =1) as corridas_hamilton,
+	count(rs.driverid) as vitorias
 FROM
 	results rs
-	JOIN drivers d ON d.driverid=rs.driverid
+	left JOIN drivers d ON d.driverid=rs.driverid
+WHERE rs."position"=1 and rs.driverid in (30,1)
 GROUP BY
 	d.driverid,
 	d.forename,
 	d.surname
-having d.driverid in (30,1)
 ORDER BY
-	corridas DESC
+	vitorias DESC
