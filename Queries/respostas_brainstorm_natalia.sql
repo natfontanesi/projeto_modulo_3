@@ -79,24 +79,62 @@ order by vitorias desc;
 
 --16: Qual foi o melhor brasileiro?
 
---17: Qual construtor e motorista relacionado mais se destacaram dentre as 5 primeiras posições durante os campeonatos?
+--17: Quais as nacionalidades presentes nos campeonatos?
+
+select distinct nationality 
+from drivers
 
 --18: De quais países advém a maior parte dos construtores?
  
---19: Quais as nacionalidades presentes nos campeonatos? e porque de british? - Será que há algum incentivo diferenciado?
- 
+--19: Qual construtora se destacou com os menores pit_stops entre 2008 e 2018?
+
 --20: Construtora que obteve mais pontos durante o período analisado...
  
---21: Quais os pit-stops mais rápidos dentre os anos analisados e de quem foi? - parada do carro para troca de pneus e reabastecimento
+--21: Top 5 dos menores pitstops registrados durante os anos analisados(1950-2018):
+
+select drivers.driverref, pitstops.milliseconds as duração_millisegundos
+from drivers
+join pitstops on drivers.driverid = pitstops.driverid 
+order by duração_millisegundos asc 
+limit 5
 
 --22: Qual motorista e construtora mais se destacou com os menores pit_stops?
 
---23: Qual construtora se destacou com os menores pit_stops durante o espaço de tempo analisado?
+--23: Quais status(ocorrências) mais recorrentes na Fórmula 1?
 
---24: Nome do circuito mais presente em cada ano analisado e a quantidade de vezes que aparece.
+select status.status, count(results.statusid) quantidade from status 
+join results on results.statusid = status.statusid 
+group by  status.statusid
+order by quantidade desc
+limit 10
 
+--24: Distribuição da quantidade de pilotos por posição nos resultados entre as sessões de 1950 a 2018?
 
---Campeoes por ano (mais ou menos):
+select results.position as posicao, count(results.position) as quantidade_de_pilotos
+from results 
+group by results.position
+order by quantidade_de_pilotos desc
+
+--25: Campeões da ultima década: 
+
+select surname, year, total from vw_campeoes_nome
+where year between '2008' and '2018'
+
+--26: Ocorrências potencialmente perigosos/fatais contra vida vivênciadas
+-- na modalidade entre os anos de 1950 - 2018
+
+select status.status as ocorrências, count(status.status) as vezes 
+from status
+join results on results.statusid = status.statusid 
+where status.status like 'Fatal accident' or status.status like 'Fire'
+or status.status like 'Accident'
+or status.status like 'Injured' 
+or status.status like 'Collision' 
+or status.status like'Collision damage'
+group by status.status
+order by vezes desc
+
+--27: Campeoes por ano (mais ou menos):
 
 SELECT 
 	rc."year",
