@@ -216,3 +216,35 @@ GROUP BY
 	d.surname
 ORDER BY
 	vitorias DESC
+
+select 
+	sum(case when q."position"=1 then 1 else 0 end) as pole_positions,
+	d.forename,
+	d.surname,
+	d.driverid
+from qualifying q
+	join drivers d on d.driverid=q.driverid
+GROUP BY
+	d.forename,
+	d.surname,
+	d.driverid
+ORDER BY
+	pole_positions desc
+
+
+select
+	c.driverid,
+	c.forename,
+	c.surname,
+	count (c.driverid) as vezes_campeao
+from 
+	vw_campeoes_nome c
+	join drivers d on d.driverid=c.driverid
+where 
+	d.driverid= 1 or d.driverid=20 or d.driverid=30
+group by 
+	c.driverid,
+	c.forename,
+	c.surname
+order by
+    vezes_campeao desc
