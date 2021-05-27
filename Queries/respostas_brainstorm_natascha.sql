@@ -198,18 +198,18 @@ having d.driverid in (30,1)
 ORDER BY
 	corridas DESC
 -- nao ta dando certo, vou tentar ver com o ruberth
-
 SELECT
 	d.driverid,
 	d.forename,
 	d.surname,
-	(select count(driverid)  from results where driverid =30) as corridas_schumacher,
-	(select count(driverid)  from results where driverid =1) as corridas_hamilton,
-	count(rs.driverid) as vitorias
+	count(rs.driverid) as corridas,
+	sum (case when rs."position"=1 then 1 else 0 end) as vitorias,
+	(sum (case when rs."position"=1 then 1 else 0 end)/count(rs.driverid)::FLOAT) as desempenho
 FROM
 	results rs
 	left JOIN drivers d ON d.driverid=rs.driverid
-WHERE rs."position"=1 and rs.driverid in (30,1)
+WHERE
+	rs.driverid=30 or rs.driverid =1
 GROUP BY
 	d.driverid,
 	d.forename,
