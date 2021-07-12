@@ -36,7 +36,7 @@ Na modalidade, nem sempre o desempenho dos carros na pista é que determinará q
 	
 ## O Projeto  :bar_chart:
 	
-###### Projeto sugerido para finalização do módulo 3 da turma #VamoAI, fruta de uma parceria entre Resilia Educação e o IFOOD :rocket:
+###### Projeto sugerido para finalização do módulo 3 da turma #VamoAI, fruto de uma parceria entre Resilia Educação e o IFOOD :rocket:
 
 </div>
 
